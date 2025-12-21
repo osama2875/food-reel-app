@@ -1,0 +1,50 @@
+/* Theme variables centralized */
+:root {
+  --bg: #ffffff;
+  --text: #0f1724;
+  --muted: #6b7280;
+  --card: #ffffff;
+  --accent: #2563eb;
+  --input-bg: #f7f9fb;
+  --border: #e6e9ef;
+  --radius: 8px;
+  --shadow: 0 6px 20px rgba(13, 16, 20, 0.06);
+
+  /* colorful background accents */
+  --bg-accent-1: #e0f2fe; /* soft sky blue */
+  --bg-accent-2: #fff1f2; /* soft pink */
+  --accent-1: #7c3aed; /* purple */
+  --accent-2: #06b6d4; /* teal */
+  --accent-3: #f43f5e; /* rosy */
+  --label-color: color-mix(in srgb, var(--accent-2) 36%, var(--muted) 64%);
+  --placeholder-color: color-mix(in srgb, var(--accent-3) 36%, var(--muted) 64%);
+  --bg-gradient: linear-gradient(135deg, var(--bg) 0%, var(--bg-accent-1) 45%, var(--bg-accent-2) 100%);
+  --auth-overlay: rgba(10,14,20,0.04);
+  --auth-overlay-2: rgba(10,14,20,0.06);
+}
+
+/* Dark mode via system preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #041022;
+    --text: #e6eef8;
+    --muted: #9aa6b2;
+    --card: #071125;
+    --accent: #0975fa;
+    --input-bg: #0e1a2b;
+    --border: #122433;
+    --shadow: 0 6px 20px rgba(2, 6, 23, 0.8);
+
+    /* dark-mode subtle color accents */
+    --bg-accent-1: #0b314d;
+    --bg-accent-2: #08202d;
+    --accent-1: #3b82f6;
+    --accent-2: #00caed;
+    --accent-3: #dd003b;
+    --label-color: color-mix(in srgb, var(--accent-2) 32%, var(--muted) 68%);
+    --placeholder-color: color-mix(in srgb, var(--accent-3) 36%, var(--muted) 64%);
+    --bg-gradient: linear-gradient(135deg, var(--bg) 0%, var(--bg-accent-1) 40%, var(--bg-accent-2) 100%);
+    --auth-overlay: rgba(0,0,0,0.12);
+    --auth-overlay-2: rgba(0,0,0,0.18);
+  }
+}

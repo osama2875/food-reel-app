@@ -1,0 +1,95 @@
+.partner-profile {
+  max-width: 1000px;
+  margin: 24px auto;
+  padding: 0 16px;
+}
+
+.profile-card {
+  display: flex;
+  gap: 18px;
+  align-items: center;
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+}
+
+.avatar-wrap {
+  width: 96px;
+  height: 96px;
+  flex: 0 0 96px;
+}
+
+.avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.avatar-placeholder {
+  width: 96px;
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 36px;
+  color: #fff;
+  background: linear-gradient(135deg,#ff7a18,#af002d);
+  border-radius: 12px;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.business-name {
+  margin: 0 0 6px 0;
+  font-size: 20px;
+}
+
+.address {
+  margin: 0 0 12px 0;
+  color: #666;
+}
+
+.stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 6px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.stat .num {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.stat .label {
+  font-size: 12px;
+  color: #666;
+}
+
+.reels-title {
+  margin: 20px 0 12px 6px;
+  font-size: 18px;
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+  .profile-card {
+    flex-direction: row;
+    gap: 12px;
+  }
+
+  .stats {
+    gap: 12px;
+  }
+}
+
