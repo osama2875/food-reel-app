@@ -3,12 +3,21 @@ const foodPartnerModel = require('../models/foodpartner.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
+// helper to set cookie (PRODUCTION SAFE)
+function setAuthCookie(res, token) {
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: true,        // ✅ REQUIRED on HTTPS (Render)
+    sameSite: 'none'     // ✅ REQUIRED for Vercel → Render
+  })
+}
+
 // ================= USER =================
 async function registerUser(req, res) {
   const { fullName, email, password } = req.body
 
-  const isUserAlreadyExists = await userModel.findOne({ email })
-  if (isUserAlreadyExists) {
+  const exists = await userModel.findOne({ email })
+  if (exists) {
     return res.status(400).json({ message: 'User already exists' })
   }
 
@@ -22,10 +31,7 @@ async function registerUser(req, res) {
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'lax'
-  })
+  setAuthCookie(res, token)
 
   res.status(201).json({
     message: 'User registered successfully',
@@ -41,17 +47,14 @@ async function loginUser(req, res) {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
-  const isPasswordValid = await bcrypt.compare(password, user.password)
-  if (!isPasswordValid) {
+  const valid = await bcrypt.compare(password, user.password)
+  if (!valid) {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
   const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'lax'
-  })
+  setAuthCookie(res, token)
 
   res.status(200).json({
     message: 'User logged in successfully',
@@ -81,10 +84,7 @@ async function registerFoodPartner(req, res) {
 
   const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET)
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'lax'
-  })
+  setAuthCookie(res, token)
 
   res.status(201).json({
     message: 'Food partner registered successfully',
@@ -100,17 +100,14 @@ async function loginFoodPartner(req, res) {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
-  const isPasswordValid = await bcrypt.compare(password, foodPartner.password)
-  if (!isPasswordValid) {
+  const valid = await bcrypt.compare(password, foodPartner.password)
+  if (!valid) {
     return res.status(400).json({ message: 'Invalid email or password' })
   }
 
   const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET)
 
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'lax'
-  })
+  setAuthCookie(res, token)
 
   res.status(200).json({
     message: 'Food partner logged in successfully',
