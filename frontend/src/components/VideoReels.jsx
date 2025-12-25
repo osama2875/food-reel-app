@@ -1,37 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import '../styles/reels.css'
 import axios from 'axios'
-import { Link, useNavigate } from 'react-router-dom' 
+import { Link } from 'react-router-dom'
+
+const BACKEND_URL = 'https://zm-ai-backend.onrender.com'
 
 const VideoReels = ({ partnerId }) => {
   const containerRef = useRef(null)
   const [videos, setVideos] = useState([])
-  const [savedIds, setSavedIds] = useState(() => {
-    try { return JSON.parse(localStorage.getItem('savedItems') || '[]') } catch (e) { return [] }
-  })
-  const [activeCommentFor, setActiveCommentFor] = useState(null)
-  const [commentText, setCommentText] = useState('')
-  const navigate = useNavigate()
-
-  // Listen for a custom event to open comments from the BottomNav
-  useEffect(() => {
-    const handler = (e) => {
-      // event may include an id, otherwise open first visible reel
-      const id = e.detail?.id || (videos[0]?._id)
-      if (id) setActiveCommentFor(id)
-    }
-    window.addEventListener('open-comments', handler)
-    return () => window.removeEventListener('open-comments', handler)
-  }, [videos])
- useEffect(() => {
-    // persist saved ids
-    localStorage.setItem('savedItems', JSON.stringify(savedIds))
-  }, [savedIds])
-
-   const toggleSave = (id) => setSavedIds(prev => prev.includes(id) ? prev.filter(x => x !== id) : [id, ...prev])
-  const openComments = (id) => { setActiveCommentFor(id); setCommentText('') }
-  const sendComment = (id) => { console.log('Comment for', id, commentText); setActiveCommentFor(null); setCommentText('') }
-
 
   // 🎥 Auto play / pause based on visibility
   useEffect(() => {
@@ -58,14 +34,17 @@ const VideoReels = ({ partnerId }) => {
     return () => observer.disconnect()
   }, [videos])
 
-  // 📡 Fetch videos from backend (PUBLIC ROUTE) and optionally filter by partnerId
+  // 📡 Fetch videos from backend (PUBLIC)
   useEffect(() => {
     axios
-      .get('http://localhost:3000/api/food')
+      .get(`${BACKEND_URL}/api/food`, {
+        withCredentials: true
+      })
       .then(res => {
-        // IMPORTANT: backend sends { foodItems: [] }
         const all = res.data.foodItems || []
-        const filtered = partnerId ? all.filter(v => String(v.foodPartner) === String(partnerId)) : all
+        const filtered = partnerId
+          ? all.filter(v => String(v.foodPartner) === String(partnerId))
+          : all
         setVideos(filtered)
       })
       .catch(err => {
@@ -76,7 +55,7 @@ const VideoReels = ({ partnerId }) => {
 
   return (
     <div className="reels-container" ref={containerRef}>
-      {Array.isArray(videos) && videos.map(item => (
+      {videos.map(item => (
         <section key={item._id} className="reel">
           <video
             src={item.video}
