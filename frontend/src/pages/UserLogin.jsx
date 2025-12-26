@@ -2,23 +2,29 @@ import React from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 
-
 const UserLogin = () => {
-
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+    const email = e.target.email.value
+    const password = e.target.password.value
 
-    const responce = await axios.post("http://localhost:3000/api/auth/user/login",{
-      email,
-      password
-    }, {withCredentials: true})
-    console.log(responce.data);
-    navigate('/')
+    try {
+      const response = await axios.post(
+        "https://zm-ai-backend.onrender.com/api/auth/user/login",
+        { email, password },
+        { withCredentials: true }
+      )
+
+      console.log(response.data)
+      navigate('/') // home → reels
+
+    } catch (error) {
+      console.error('Login failed:', error)
+      alert('Invalid email or password')
+    }
   }
 
   return (
@@ -34,12 +40,24 @@ const UserLogin = () => {
         <form className="form" onSubmit={handleSubmit}>
           <div>
             <label className="form-label">Email</label>
-            <input className="input" type="email" name='email' placeholder="you@example.com" />
+            <input
+              className="input"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              required
+            />
           </div>
 
           <div>
             <label className="form-label">Password</label>
-            <input className="input" type="password" name='password' placeholder="••••••••" />
+            <input
+              className="input"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+            />
           </div>
 
           <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
@@ -52,7 +70,9 @@ const UserLogin = () => {
             <a className="auth-link" href="/food-partner/register">Register as Food Partner</a>
           </div>
 
-          <div className="footer-note">New here? <a href="/user/register">Create an account</a></div>
+          <div className="footer-note">
+            New here? <a href="/user/register">Create an account</a>
+          </div>
         </form>
       </div>
     </div>

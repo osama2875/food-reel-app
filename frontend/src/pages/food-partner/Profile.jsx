@@ -8,27 +8,34 @@ const Profile = () => {
   const { id } = useParams()
 
   const [profile, setProfile] = useState({
-    businessName: 'Awesome Bites',
-    address: '123 Food Street, Flavor Town',
-    totalMeals: 1200,
-    customers: 850,
-    servers: 12,
+    businessName: 'Food Partner',
+    address: '',
+    totalMeals: 0,
+    customers: 0,
+    servers: 0,
     avatar: ''
   })
 
-  // Try to fetch partner info if backend exposes an endpoint. Fallback to mock data.
+  // 🔗 Fetch food partner profile (LIVE BACKEND)
   useEffect(() => {
     if (!id) return
 
     axios
-      .get(`http://localhost:3000/api/food-partner/${id}`)
+      .get(`https://zm-ai-backend.onrender.com/api/food-partner/${id}`)
       .then(res => {
-        // backend shape may vary; attempt to pick reasonable fields
-        const d = res.data.foodPartner || res.data || {}
-        setProfile(prev => ({ ...prev, ...d }))
+        const data = res.data.foodPartner || res.data || {}
+
+        setProfile({
+          businessName: data.name || 'Food Partner',
+          address: data.address || '',
+          totalMeals: data.totalMeals || 0,
+          customers: data.customers || 0,
+          servers: data.servers || 0,
+          avatar: data.avatar || ''
+        })
       })
-      .catch(() => {
-        // silent fallback — keep mock data
+      .catch(err => {
+        console.log('Partner profile fetch failed (fallback used)')
       })
   }, [id])
 
@@ -39,7 +46,9 @@ const Profile = () => {
           {profile.avatar ? (
             <img className="avatar" src={profile.avatar} alt="avatar" />
           ) : (
-            <div className="avatar-placeholder">{(profile.businessName || '').charAt(0)}</div>
+            <div className="avatar-placeholder">
+              {profile.businessName.charAt(0)}
+            </div>
           )}
         </div>
 
@@ -67,7 +76,6 @@ const Profile = () => {
       </div>
 
       <h3 className="reels-title">Reels</h3>
-      {/* Pass partner id to VideoReels to show only this partner's videos when available */}
       <VideoReels partnerId={id} />
     </div>
   )
